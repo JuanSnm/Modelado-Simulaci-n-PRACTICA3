@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:macro name="robot_sensors" params="prefix">
+
+        <xacro:sensor_imu
+            prefix="${prefix}imu"
+            parent="base_link"
+            xyz="0 0 0.20"
+            topic="/imu/data"/>
+
+        <xacro:sensor_camera
+            frame_prefix="${prefix}front"
+            parent="base_link"
+            xyz="1.55 0 0.40"
+            rpy="0 0 0"
+            horizontal_fov="1.0472"
+            video_width="640"
+            video_height="480"/>
+
+        <xacro:sensor_camera
+            frame_prefix="${prefix}tool"
+            parent="base_endEffector_link"
+            xyz="0 0 0.08"
+            rpy="0 1.5708 0"
+            horizontal_fov="1.0472"
+            video_width="640"
+            video_height="480"/>
+
+    </xacro:macro>
+
+</robot>

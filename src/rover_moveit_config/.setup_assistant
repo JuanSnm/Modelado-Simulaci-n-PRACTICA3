@@ -1,0 +1,27 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: rover_description
+    relative_path: robots/robot.urdf.xacro
+  srdf:
+    relative_path: config/robot_Practica2.srdf
+  package_settings:
+    author_name: Juan San Miguel
+    author_email: j.sanmiguel.2023@alumnos.urjc.es
+    generated_timestamp: 1777314237
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+      - effort
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+      - effort

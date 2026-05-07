@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<robot name="robot_Practica2" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:include filename="$(find rover_description)/urdf/utils/utils.urdf.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/base/robot_base.urdf.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/wheels/rover_wheel.urdf.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/arm/scara.urdf.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/arm/gripper.urdf.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/sensors/imu_sensor.urdf.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/sensors/camera.urdf.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/sensors/sensors.urdf.xacro"/>
+    <xacro:include filename="$(find rover_moveit_config)/config/robot_Practica2.ros2_control.xacro"/>
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+
+    <xacro:property name="wheelA_1_xyz" value="1.07987 -1.32843 -0.83009"/>
+    <xacro:property name="wheelA_2_xyz" value="-0.65003 -1.32843 -0.83009"/>
+    <xacro:property name="wheelA_3_xyz" value="-2.23201 -1.32843 -0.83009"/>
+
+    <xacro:property name="wheelB_1_xyz" value="1.07987 1.32831 -0.83009"/>
+    <xacro:property name="wheelB_2_xyz" value="-0.65003 1.32832 -0.83009"/>
+    <xacro:property name="wheelB_3_xyz" value="-2.23201 1.32832 -0.83009"/>
+
+    <xacro:arg name="prefix" default=""/>
+    <xacro:arg name="config_controllers" default="$(find rover_description)/config/rover_controllers.yaml"/>
+    <xacro:arg name="moveit_controllers" default="$(find rover_moveit_config)/config/ros2_controllers.yaml"/>
+    <xacro:arg name="initial_positions_file" default="$(find rover_moveit_config)/config/initial_positions.yaml"/>
+
+    <xacro:robot_base prefix="$(arg prefix)"/>
+
+    <xacro:rover_wheel prefix="wheelA_1" parent="base_link">
+        <origin xyz="${wheelA_1_xyz}" rpy="1.57080 0 0"/>
+    </xacro:rover_wheel>
+
+    <xacro:rover_wheel prefix="wheelA_2" parent="base_link">
+        <origin xyz="${wheelA_2_xyz}" rpy="1.57080 0 0"/>
+    </xacro:rover_wheel>
+
+    <xacro:rover_wheel prefix="wheelA_3" parent="base_link">
+        <origin xyz="${wheelA_3_xyz}" rpy="1.57080 0 0"/>
+    </xacro:rover_wheel>
+
+    <xacro:rover_wheel prefix="wheelB_1" parent="base_link">
+        <origin xyz="${wheelB_1_xyz}" rpy="1.57080 0 0"/>
+    </xacro:rover_wheel>
+
+    <xacro:rover_wheel prefix="wheelB_2" parent="base_link">
+        <origin xyz="${wheelB_2_xyz}" rpy="1.57080 0 0"/>
+    </xacro:rover_wheel>
+
+    <xacro:rover_wheel prefix="wheelB_3" parent="base_link">
+        <origin xyz="${wheelB_3_xyz}" rpy="1.57080 0 0"/>
+    </xacro:rover_wheel>
+
+    <xacro:scara_arm
+        prefix="$(arg prefix)"
+        parent="base_link"/>
+
+    <xacro:robot_gripper
+        prefix="$(arg prefix)"
+        parent="base_endEffector_link"/>
+
+    <xacro:robot_sensors prefix="$(arg prefix)"/>
+
+    <xacro:robot_Practica2_ros2_control
+        name="GazeboSimSystem"
+        initial_positions_file="$(arg initial_positions_file)"/>
+
+    <gazebo>
+        <plugin filename="libgz_ros2_control-system.so"
+                name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>$(arg config_controllers)</parameters>
+            <parameters>$(arg moveit_controllers)</parameters>
+            <controller_manager_name>controller_manager</controller_manager_name>
+            <hold_joints>true</hold_joints>
+            <position_proportional_gain>0.1</position_proportional_gain>
+        </plugin>
+    </gazebo>
+
+</robot>

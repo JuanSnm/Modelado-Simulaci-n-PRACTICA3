@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<robot name="wheel" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="rover_wheel" params="prefix parent *origin">
+
+    <xacro:property name="mesh_name" value="Torus.dae"/>
+    <xacro:property name="visual_z" value="0.04000"/>
+    <xacro:property name="collision_z" value="0.04000"/>
+    <xacro:property name="inertial_z" value="0.04000"/>
+
+    <xacro:property name="mass_value" value="5.00000"/>
+    <xacro:property name="ixx_value" value="0.22705"/>
+    <xacro:property name="ixy_value" value="0.00000"/>
+    <xacro:property name="ixz_value" value="0.00000"/>
+    <xacro:property name="iyy_value" value="0.37534"/>
+    <xacro:property name="iyz_value" value="0.00000"/>
+    <xacro:property name="izz_value" value="0.22705"/>
+
+    <xacro:if value="${prefix == 'wheelA_1'}">
+        <xacro:property name="mesh_name" value="Torus.005.dae"/>
+        <xacro:property name="visual_z" value="-0.04000"/>
+        <xacro:property name="collision_z" value="-0.04000"/>
+        <xacro:property name="inertial_z" value="-0.04000"/>
+    </xacro:if>
+
+    <xacro:if value="${prefix == 'wheelA_2'}">
+        <xacro:property name="mesh_name" value="Torus.004.dae"/>
+        <xacro:property name="visual_z" value="-0.04000"/>
+        <xacro:property name="collision_z" value="-0.04000"/>
+        <xacro:property name="inertial_z" value="-0.04000"/>
+    </xacro:if>
+
+    <xacro:if value="${prefix == 'wheelA_3'}">
+        <xacro:property name="mesh_name" value="Torus.003.dae"/>
+        <xacro:property name="visual_z" value="-0.04000"/>
+        <xacro:property name="collision_z" value="-0.04000"/>
+        <xacro:property name="inertial_z" value="-0.04000"/>
+    </xacro:if>
+
+    <xacro:if value="${prefix == 'wheelB_1'}">
+        <xacro:property name="mesh_name" value="Torus.dae"/>
+        <xacro:property name="visual_z" value="0.04000"/>
+        <xacro:property name="collision_z" value="0.04000"/>
+        <xacro:property name="inertial_z" value="0.00000"/>
+
+        <xacro:property name="mass_value" value="2.0"/>
+        <xacro:property name="ixx_value" value="0.05"/>
+        <xacro:property name="ixy_value" value="0.0"/>
+        <xacro:property name="ixz_value" value="0.0"/>
+        <xacro:property name="iyy_value" value="0.05"/>
+        <xacro:property name="iyz_value" value="0.0"/>
+        <xacro:property name="izz_value" value="0.05"/>
+    </xacro:if>
+
+    <xacro:if value="${prefix == 'wheelB_2'}">
+        <xacro:property name="mesh_name" value="Torus.001.dae"/>
+    </xacro:if>
+
+    <xacro:if value="${prefix == 'wheelB_3'}">
+        <xacro:property name="mesh_name" value="Torus.002.dae"/>
+    </xacro:if>
+
+    <joint name="${prefix}_link_joint" type="continuous">
+        <parent link="${parent}"/>
+        <child link="${prefix}_link"/>
+        <xacro:insert_block name="origin"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="500.0" velocity="40.0"/>
+    </joint>
+
+    <link name="${prefix}_link">
+
+      <collision name="${prefix}_collision">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.30" length="0.12"/>
+        </geometry>
+      </collision>
+
+      <visual name="${prefix}">
+        <origin xyz="0 0 ${visual_z}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${mesh_dir}/${mesh_name}" scale="0.32000 0.32000 0.80000"/>
+        </geometry>
+        <material name="wheel_dark">
+          <color rgba="0.20 0.20 0.20 1.0"/>
+        </material>
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 ${inertial_z}" rpy="0 0 0"/>
+        <mass value="${mass_value}"/>
+        <inertia ixx="${ixx_value}" ixy="${ixy_value}" ixz="${ixz_value}"
+                iyy="${iyy_value}" iyz="${iyz_value}" izz="${izz_value}"/>
+      </inertial>
+
+    </link>
+
+    <gazebo reference="${prefix}_link">
+      <material>
+        <ambient>0.20 0.20 0.20 1.0</ambient>
+        <diffuse>0.20 0.20 0.20 1.0</diffuse>
+        <specular>0.05 0.05 0.05 1.0</specular>
+      </material>
+
+      <!-- Menos fricción lateral para permitir skid steering -->
+      <mu1>0.8</mu1>
+      <mu2>0.02</mu2>
+      <slip1>0.0</slip1>
+      <slip2>1.0</slip2>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

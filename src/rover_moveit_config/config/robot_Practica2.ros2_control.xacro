@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="robot_Practica2_ros2_control" params="name initial_positions_file">
+        <!--
+          This macro defines the ros2_control hardware interface for the robot and
+          exposes command and state interfaces for every controllable joint.  The
+          generated interface uses the GazeboSimSystem plugin from
+          gz_ros2_control so that commands received via the controller manager
+          propagate to the simulation and state feedback is published back to
+          ROS 2.  Initial positions for the arm and gripper joints are loaded
+          from the provided YAML file.  Wheel joints do not have initial
+          positions as they are velocity controlled.
+        -->
+        <xacro:property name="initial_positions" value="${xacro.load_yaml(initial_positions_file)['initial_positions']}"/>
+
+        <ros2_control name="${name}" type="system">
+            <hardware>
+                <!-- Use GazeboSimSystem so ROS 2 control interacts with the Gazebo simulator. -->
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+
+            <!-- Define interfaces for the wheel joints (velocity controlled) -->
+            <joint name="wheelA_1_link_joint">
+                <command_interface name="velocity">
+                  <!-- Limit wheel velocity between -10 and 10 rad/s -->
+                  <param name="min">-30.0</param>
+                  <param name="max">30.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="wheelA_2_link_joint">
+                <command_interface name="velocity">
+                  <param name="min">-30.0</param>
+                  <param name="max">30.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="wheelA_3_link_joint">
+                <command_interface name="velocity">
+                  <param name="min">-30.0</param>
+                  <param name="max">30.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="wheelB_1_link_joint">
+                <command_interface name="velocity">
+                  <param name="min">-30.0</param>
+                  <param name="max">30.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="wheelB_2_link_joint">
+                <command_interface name="velocity">
+                  <param name="min">-30.0</param>
+                  <param name="max">30.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="wheelB_3_link_joint">
+                <command_interface name="velocity">
+                  <param name="min">-30.0</param>
+                  <param name="max">30.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+
+            <!-- Arm joints are position controlled.  Each joint exposes
+                 position, velocity and effort state interfaces.  Initial
+                 positions are loaded from the YAML file. -->
+            <joint name="arm_1_link_joint">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['arm_1_link_joint']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="arm_2_link_joint">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['arm_2_link_joint']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="arm_3_link_joint">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['arm_3_link_joint']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="arm_4_link_joint">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['arm_4_link_joint']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+
+            <!-- Gripper joints are position controlled in the same way. -->
+            <joint name="gripper_1_link_joint">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['gripper_1_link_joint']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            <joint name="gripper_2_link_joint">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['gripper_2_link_joint']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+
+        </ros2_control>
+    </xacro:macro>
+</robot>

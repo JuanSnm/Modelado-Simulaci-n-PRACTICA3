@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:property name="mesh_dir" value="package://rover_description/meshes/dae"/>
+
+    <xacro:macro name="solid_cuboid_inertia" params="m w h d">
+        <inertia ixx="${(m*(h*h+d*d))/12.0}" ixy="0.0" ixz="0.0"
+                iyy="${(m*(w*w+d*d))/12.0}" iyz="0.0"
+                izz="${(m*(w*w+h*h))/12.0}"/>
+    </xacro:macro>
+
+</robot>
